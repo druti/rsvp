@@ -2,9 +2,10 @@ import React from 'react';
 import T from 'proptypes';
 
 const PendingGuest = props =>
-    <li className="pending">
-      <span>{props.name}</span>
-    </li>
+    !props.name ? null :
+      <li className="pending">
+        <span>{props.name}</span>
+      </li>
 
 PendingGuest.propTypes = {
   name: T.string.isRequired,
