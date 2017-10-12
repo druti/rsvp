@@ -12,24 +12,36 @@ class App extends Component {
         name: 'Treasure',
         isConfirmed: false,
         isEditing: false,
+        id: 0,
       },
       {
         name: 'Sandra',
         isConfirmed: true,
         isEditing: false,
+        id: 1,
       },
       {
         name: 'Nic',
         isConfirmed: true,
         isEditing: true,
+        id: 2,
       },
     ],
   }
 
-  updateGuestPropertyAt = (property, indexToChange, value) => {
+  lastGuestId = this.state.guests.length &&
+    this.state.guests[this.state.guests.length-1].id++
+
+  generateNewGuestId = () => {
+    const id = this.lastGuestId;
+    this.lastGuestId += 1;
+    return id;
+  }
+
+  updateGuestProperty = (property, id, value) => {
     this.setState({
-      guests: this.state.guests.map((guest, index) => {
-        return index !== indexToChange ? guest : {
+      guests: this.state.guests.map((guest) => {
+        return guest.id !== id ? guest : {
           ...guest,
           [property]: typeof value !== 'undefined' ? value : !guest[property],
         };
@@ -37,22 +49,19 @@ class App extends Component {
     });
   }
 
-  setNameAt = (value, index) =>
-    this.updateGuestPropertyAt('name', index, value)
+  setName = (value, id) =>
+    this.updateGuestProperty('name', id, value)
 
-  removeGuestAt = index =>
+  removeGuest = id =>
     this.setState({
-      guests: [
-        ...this.state.guests.slice(0, index),
-        ...this.state.guests.slice(index + 1),
-      ],
+      guests: this.state.guests.filter(guest => guest.id !== id),
     })
 
-  toggleConfirmationAt = index =>
-    this.updateGuestPropertyAt('isConfirmed', index)
+  toggleConfirmation = id =>
+    this.updateGuestProperty('isConfirmed', id)
 
-  toggleEditingAt = index =>
-    this.updateGuestPropertyAt('isEditing', index)
+  toggleEditing = id =>
+    this.updateGuestProperty('isEditing', id)
 
   toggleFilter = () => 
     this.setState({ isFiltered: !this.state.isFiltered })
@@ -104,10 +113,10 @@ class App extends Component {
           numberUnconfirmed={numberUnconfirmed}
           totalInvited={totalInvited}
           guests={this.state.guests}
-          setNameAt={this.setNameAt}
-          removeGuestAt={this.removeGuestAt}
-          toggleConfirmationAt={this.toggleConfirmationAt}
-          toggleEditingAt={this.toggleEditingAt}
+          setName={this.setName}
+          removeGuest={this.removeGuest}
+          toggleConfirmation={this.toggleConfirmation}
+          toggleEditing={this.toggleEditing}
           pendingGuest={this.state.pendingGuest}
         />
       </div>
