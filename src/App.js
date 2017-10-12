@@ -79,6 +79,7 @@ class App extends Component {
           isEditing: false,
         }, ...this.state.guests],
         pendingGuest: '',
+        isFiltered: false,
       });
     }
   }
